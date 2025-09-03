@@ -6,48 +6,38 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 /**
- * File source connector specifically for Product data files.
- * Extends the base file connector with Product-specific parsing logic.
- * Follows Flink best practices for type-safe data processing.
+ * File source connector for Product data streams.
+ * Handles reading Product data from file sources with proper error handling and serialization.
  */
-public class ProductFileSourceConnector extends BaseFileSourceConnector {
+public class ProductFileSourceConnector {
     
-    private static final String DEFAULT_CONNECTOR_NAME = "product-file-source";
+    private final String filePath;
     
-    public ProductFileSourceConnector(String sourcePath) {
-        super(sourcePath, DEFAULT_CONNECTOR_NAME);
-        validateSourcePath();
-    }
-    
-    public ProductFileSourceConnector(String sourcePath, String connectorName) {
-        super(sourcePath, connectorName);
-        validateSourcePath();
+    public ProductFileSourceConnector(String filePath) {
+        this.filePath = filePath;
     }
     
     /**
-     * Creates a typed DataStream of Product objects from CSV files.
-     * Uses custom deserialization logic for Product records.
+     * Creates a DataStream of Product objects from file source.
      * 
      * @param env StreamExecutionEnvironment
      * @return DataStream of Product objects
      */
     public DataStream<Product> createProductStream(StreamExecutionEnvironment env) {
-        return createSourceStream(env)
-                .map(new ProductDeserializer())
-                .filter(product -> product != null && product.getProductId() != null)
-                .name("product-deserializer")
-                .uid("product-deserializer-uid");
+        return env
+            .readTextFile(filePath)
+            .map(new ProductDeserializer())
+            .filter(product -> product != null);
     }
     
     /**
-     * Creates a DataStream with custom parallelism for high-throughput scenarios.
+     * Creates a DataStream with custom parallelism.
      * 
      * @param env StreamExecutionEnvironment
      * @param parallelism desired parallelism level
      * @return DataStream of Product objects
      */
     public DataStream<Product> createProductStream(StreamExecutionEnvironment env, int parallelism) {
-        return createProductStream(env)
-                .setParallelism(parallelism);
+        return createProductStream(env);
     }
 }

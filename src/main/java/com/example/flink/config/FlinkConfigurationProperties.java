@@ -1,14 +1,12 @@
 package com.example.flink.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 /**
  * Spring Boot Configuration Properties for Flink Application.
  * This class automatically binds YAML properties to Java objects.
  * Eliminates need for custom configuration wrappers - uses Spring Boot standards.
  */
-@Component
 @ConfigurationProperties(prefix = "flink")
 public class FlinkConfigurationProperties {
 

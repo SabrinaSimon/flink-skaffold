@@ -42,9 +42,7 @@ public class ConcentrationCalculationPipeline {
         
         // Key accounts by account type for parallel processing
         KeyedStream<Account, String> keyedAccounts = accountStream
-                .keyBy(new AccountTypeKeySelector())
-                .name("key-by-account-type")
-                .uid("key-by-account-type-uid");
+                .keyBy(new AccountTypeKeySelector());
         
         // Apply windowing for time-based aggregations
         DataStream<ConcentrationResult> concentrationResults = keyedAccounts
@@ -52,16 +50,12 @@ public class ConcentrationCalculationPipeline {
                 .aggregate(
                     new ConcentrationAggregator(),
                     new ConcentrationWindowFunction()
-                )
-                .name("concentration-window-aggregation")
-                .uid("concentration-window-aggregation-uid");
+                );
         
         // Apply business rules and validations
         return concentrationResults
                 .map(new ConcentrationValidationFunction())
-                .filter(result -> result != null && result.getStatus() != null)
-                .name("concentration-validation")
-                .uid("concentration-validation-uid");
+                .filter(result -> result != null && result.getStatus() != null);
     }
     
     /**
@@ -72,8 +66,7 @@ public class ConcentrationCalculationPipeline {
      * @return DataStream of ConcentrationResult objects
      */
     public DataStream<ConcentrationResult> process(DataStream<Account> accountStream, int parallelism) {
-        return process(accountStream)
-                .setParallelism(parallelism);
+        return process(accountStream);
     }
     
     /**

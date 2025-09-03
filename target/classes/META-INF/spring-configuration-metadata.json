@@ -1,0 +1,198 @@
+{
+  "groups": [
+    {
+      "name": "flink",
+      "type": "com.example.flink.config.FlinkConfigurationProperties",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties"
+    },
+    {
+      "name": "flink.application",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Application",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties",
+      "sourceMethod": "getApplication()"
+    },
+    {
+      "name": "flink.metrics",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Metrics",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties",
+      "sourceMethod": "getMetrics()"
+    },
+    {
+      "name": "flink.processing",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Processing",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties",
+      "sourceMethod": "getProcessing()"
+    },
+    {
+      "name": "flink.processing.cash",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Processing$Cash",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Processing",
+      "sourceMethod": "getCash()"
+    },
+    {
+      "name": "flink.processing.cash.window",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Processing$Window",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Processing$Cash",
+      "sourceMethod": "getWindow()"
+    },
+    {
+      "name": "flink.processing.cash.window.size",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Processing$Window$Size",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Processing$Window",
+      "sourceMethod": "getSize()"
+    },
+    {
+      "name": "flink.processing.checkpointing",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Processing$Checkpointing",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Processing",
+      "sourceMethod": "getCheckpointing()"
+    },
+    {
+      "name": "flink.processing.concentration",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Processing$Concentration",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Processing",
+      "sourceMethod": "getConcentration()"
+    },
+    {
+      "name": "flink.processing.concentration.window",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Processing$Window",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Processing$Concentration",
+      "sourceMethod": "getWindow()"
+    },
+    {
+      "name": "flink.processing.concentration.window.size",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Processing$Window$Size",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Processing$Window",
+      "sourceMethod": "getSize()"
+    },
+    {
+      "name": "flink.quality",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Quality",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties",
+      "sourceMethod": "getQuality()"
+    },
+    {
+      "name": "flink.quality.validation",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Quality$Validation",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Quality",
+      "sourceMethod": "getValidation()"
+    },
+    {
+      "name": "flink.sink",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Sink",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties",
+      "sourceMethod": "getSink()"
+    },
+    {
+      "name": "flink.sink.cash",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Sink$Cash",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Sink",
+      "sourceMethod": "getCash()"
+    },
+    {
+      "name": "flink.sink.concentration",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Sink$Concentration",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Sink",
+      "sourceMethod": "getConcentration()"
+    },
+    {
+      "name": "flink.source",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Source",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties",
+      "sourceMethod": "getSource()"
+    },
+    {
+      "name": "flink.source.account",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Source$Account",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Source",
+      "sourceMethod": "getAccount()"
+    },
+    {
+      "name": "flink.source.product",
+      "type": "com.example.flink.config.FlinkConfigurationProperties$Source$Product",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Source",
+      "sourceMethod": "getProduct()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "flink.application.name",
+      "type": "java.lang.String",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Application",
+      "defaultValue": "flink-data-processing"
+    },
+    {
+      "name": "flink.application.version",
+      "type": "java.lang.String",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Application",
+      "defaultValue": "1.0.0"
+    },
+    {
+      "name": "flink.metrics.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Metrics",
+      "defaultValue": false
+    },
+    {
+      "name": "flink.processing.cash.window.size.ms",
+      "type": "java.lang.Long",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Processing$Window$Size",
+      "defaultValue": 60000
+    },
+    {
+      "name": "flink.processing.checkpointing.interval",
+      "type": "java.lang.Long",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Processing$Checkpointing",
+      "defaultValue": 60000
+    },
+    {
+      "name": "flink.processing.concentration.window.size.ms",
+      "type": "java.lang.Long",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Processing$Window$Size",
+      "defaultValue": 60000
+    },
+    {
+      "name": "flink.processing.parallelism",
+      "type": "java.lang.Integer",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Processing",
+      "defaultValue": 4
+    },
+    {
+      "name": "flink.quality.validation.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Quality$Validation",
+      "defaultValue": true
+    },
+    {
+      "name": "flink.sink.cash.path",
+      "type": "java.lang.String",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Sink$Cash",
+      "defaultValue": ".\/data\/output\/cash-results"
+    },
+    {
+      "name": "flink.sink.concentration.path",
+      "type": "java.lang.String",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Sink$Concentration",
+      "defaultValue": ".\/data\/output\/concentration-results"
+    },
+    {
+      "name": "flink.sink.parallelism",
+      "type": "java.lang.Integer",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Sink",
+      "defaultValue": 1
+    },
+    {
+      "name": "flink.source.account.path",
+      "type": "java.lang.String",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Source$Account",
+      "defaultValue": ".\/data\/input\/accounts.csv"
+    },
+    {
+      "name": "flink.source.product.path",
+      "type": "java.lang.String",
+      "sourceType": "com.example.flink.config.FlinkConfigurationProperties$Source$Product",
+      "defaultValue": ".\/data\/input\/products.csv"
+    }
+  ],
+  "hints": []
+}

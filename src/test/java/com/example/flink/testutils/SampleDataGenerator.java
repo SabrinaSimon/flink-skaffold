@@ -1,7 +1,7 @@
 package com.example.flink.testutils;
 
-import com.example.flink.model.Account;
-import com.example.flink.model.Product;
+import com.example.flink.domain.model.Account;
+import com.example.flink.domain.model.Product;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

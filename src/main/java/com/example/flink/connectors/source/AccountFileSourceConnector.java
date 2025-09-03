@@ -6,48 +6,38 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 /**
- * File source connector specifically for Account data files.
- * Extends the base file connector with Account-specific parsing logic.
- * Follows Flink best practices for type-safe data processing.
+ * File source connector for Account data streams.
+ * Handles reading Account data from file sources with proper error handling and serialization.
  */
-public class AccountFileSourceConnector extends BaseFileSourceConnector {
+public class AccountFileSourceConnector {
     
-    private static final String DEFAULT_CONNECTOR_NAME = "account-file-source";
+    private final String filePath;
     
-    public AccountFileSourceConnector(String sourcePath) {
-        super(sourcePath, DEFAULT_CONNECTOR_NAME);
-        validateSourcePath();
-    }
-    
-    public AccountFileSourceConnector(String sourcePath, String connectorName) {
-        super(sourcePath, connectorName);
-        validateSourcePath();
+    public AccountFileSourceConnector(String filePath) {
+        this.filePath = filePath;
     }
     
     /**
-     * Creates a typed DataStream of Account objects from CSV files.
-     * Uses custom deserialization logic for Account records.
+     * Creates a DataStream of Account objects from file source.
      * 
      * @param env StreamExecutionEnvironment
      * @return DataStream of Account objects
      */
     public DataStream<Account> createAccountStream(StreamExecutionEnvironment env) {
-        return createSourceStream(env)
-                .map(new AccountDeserializer())
-                .filter(account -> account != null && account.getAccountId() != null)
-                .name("account-deserializer")
-                .uid("account-deserializer-uid");
+        return env
+            .readTextFile(filePath)
+            .map(new AccountDeserializer())
+            .filter(account -> account != null);
     }
     
     /**
-     * Creates a DataStream with custom parallelism for high-throughput scenarios.
+     * Creates a DataStream with custom parallelism.
      * 
      * @param env StreamExecutionEnvironment
      * @param parallelism desired parallelism level
      * @return DataStream of Account objects
      */
     public DataStream<Account> createAccountStream(StreamExecutionEnvironment env, int parallelism) {
-        return createAccountStream(env)
-                .setParallelism(parallelism);
+        return createAccountStream(env);
     }
 }

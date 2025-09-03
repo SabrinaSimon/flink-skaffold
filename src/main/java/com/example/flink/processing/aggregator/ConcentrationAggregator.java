@@ -117,6 +117,18 @@ public class ConcentrationAggregator implements AggregateFunction<Account, Conce
         if (accumulator.accountCount <= 1 || accumulator.totalBalance == 0) {
             return 1.0; // Maximum concentration for single account or zero balance
         }
+        
+        // Simple concentration ratio based on balance spread
+        double balanceRange = accumulator.maxBalance - accumulator.minBalance;
+        double averageBalance = accumulator.totalBalance / accumulator.accountCount;
+        
+        if (averageBalance == 0) {
+            return 1.0;
+        }
+        
+        // Higher ratio means more concentration (less spread)
+        return 1.0 - (balanceRange / (accumulator.maxBalance + 1.0));
+    }
 }
 
 /**

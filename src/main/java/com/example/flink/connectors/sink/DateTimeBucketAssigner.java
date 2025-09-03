@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
  * Creates a hierarchical directory structure for better file organization.
  * Format: year=YYYY/month=MM/day=DD/hour=HH/
  */
-public class DateTimeBucketAssigner implements BucketAssigner<Object, String> {
+public class DateTimeBucketAssigner<T> implements BucketAssigner<T, String> {
     
     private static final DateTimeFormatter YEAR_FORMATTER = DateTimeFormatter.ofPattern("yyyy");
     private static final DateTimeFormatter MONTH_FORMATTER = DateTimeFormatter.ofPattern("MM");
@@ -19,7 +19,7 @@ public class DateTimeBucketAssigner implements BucketAssigner<Object, String> {
     private static final DateTimeFormatter HOUR_FORMATTER = DateTimeFormatter.ofPattern("HH");
     
     @Override
-    public String getBucketId(Object element, Context context) {
+    public String getBucketId(T element, Context context) {
         LocalDateTime now = LocalDateTime.now();
         
         return "year=" + now.format(YEAR_FORMATTER) +

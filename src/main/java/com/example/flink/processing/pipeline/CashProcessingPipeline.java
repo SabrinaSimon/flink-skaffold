@@ -42,9 +42,7 @@ public class CashProcessingPipeline {
         
         // Key accounts by account ID for individual cash position tracking
         KeyedStream<Account, String> keyedAccounts = accountStream
-                .keyBy(new AccountIdKeySelector())
-                .name("key-by-account-id")
-                .uid("key-by-account-id-uid");
+                .keyBy(new AccountIdKeySelector());
         
         // Apply windowing for time-based cash calculations
         DataStream<CashResult> cashResults = keyedAccounts
@@ -52,16 +50,12 @@ public class CashProcessingPipeline {
                 .aggregate(
                     new CashAggregator(),
                     new CashWindowFunction()
-                )
-                .name("cash-window-aggregation")
-                .uid("cash-window-aggregation-uid");
+                );
         
         // Apply cash processing business rules
         return cashResults
                 .map(new CashValidationFunction())
-                .filter(result -> result != null && result.getStatus() != null)
-                .name("cash-validation")
-                .uid("cash-validation-uid");
+                .filter(result -> result != null && result.getStatus() != null);
     }
     
     /**
@@ -72,8 +66,7 @@ public class CashProcessingPipeline {
      * @return DataStream of CashResult objects
      */
     public DataStream<CashResult> process(DataStream<Account> accountStream, int parallelism) {
-        return process(accountStream)
-                .setParallelism(parallelism);
+        return process(accountStream);
     }
     
     /**

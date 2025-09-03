@@ -1,6 +1,7 @@
 package com.example.flink.utils;
 
 import org.junit.jupiter.api.Test;
+import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,13 +13,17 @@ class ConstantsTest {
 
     @Test
     void testConstantsClassCannotBeInstantiated() {
-        // Test that Constants constructor throws exception
-        assertThrows(UnsupportedOperationException.class, () -> {
+        // Test that Constants constructor throws exception when invoked via reflection
+        InvocationTargetException exception = assertThrows(InvocationTargetException.class, () -> {
             // Use reflection to access private constructor
             java.lang.reflect.Constructor<Constants> constructor = Constants.class.getDeclaredConstructor();
             constructor.setAccessible(true);
             constructor.newInstance();
         });
+        
+        // Verify the root cause is UnsupportedOperationException
+        assertTrue(exception.getCause() instanceof UnsupportedOperationException);
+        assertEquals("Constants class cannot be instantiated", exception.getCause().getMessage());
     }
 
     @Test

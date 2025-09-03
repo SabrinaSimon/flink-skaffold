@@ -86,13 +86,9 @@ public class DataProcessingJob {
         ProductFileSourceConnector productSource = new ProductFileSourceConnector(config.getSource().getProduct().getPath());
         
         // Create data streams from sources
-        DataStream<Account> accountStream = accountSource.createAccountStream(env)
-                .name("account-source-stream")
-                .uid("account-source-stream-uid");
+        DataStream<Account> accountStream = accountSource.createAccountStream(env);
         
-        DataStream<Product> productStream = productSource.createProductStream(env)
-                .name("product-source-stream")
-                .uid("product-source-stream-uid");
+        DataStream<Product> productStream = productSource.createProductStream(env);
         
         // === PROCESSING LAYER ===
         // Initialize processing pipelines
@@ -101,15 +97,11 @@ public class DataProcessingJob {
         
         // Process account data through concentration calculation pipeline
         DataStream<ConcentrationResult> concentrationResults = concentrationPipeline
-                .process(accountStream, config.getProcessing().getParallelism())
-                .name("concentration-processing")
-                .uid("concentration-processing-uid");
+                .process(accountStream, config.getProcessing().getParallelism());
         
         // Process account data through cash processing pipeline
         DataStream<CashResult> cashResults = cashPipeline
-                .process(accountStream, config.getProcessing().getParallelism())
-                .name("cash-processing")
-                .uid("cash-processing-uid");
+                .process(accountStream, config.getProcessing().getParallelism());
         
         // === SINK LAYER ===
         // Create file sink connectors with Spring configuration

@@ -42,7 +42,7 @@ public abstract class BaseFileSinkConnector<T> {
                 .withMaxPartSize(1024 * 1024 * 128)  // Roll when file reaches 128MB
                 .build()
         )
-        .withBucketAssigner(new DateTimeBucketAssigner())
+        .withBucketAssigner(new DateTimeBucketAssigner<T>())
         .build();
     }
     
