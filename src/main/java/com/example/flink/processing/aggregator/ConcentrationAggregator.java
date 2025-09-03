@@ -11,33 +11,33 @@ import org.apache.flink.util.Collector;
 import java.time.LocalDateTime;
 
 /**
- * Technical aggregator for accumulating concentration-related data within time windows.
- * Pure aggregation without business logic - business rules should be applied in separate processors.
+ * SCAFFOLD: Concentration Aggregator Template
  * 
- * This aggregator only:
- * - Accumulates balances by account type
- * - Counts accounts
- * - Tracks timing information
+ * This is a scaffolding template for concentration calculations.
+ * Replace TODO placeholders with actual business logic when implementing user stories.
  * 
- * Business logic (risk calculations, thresholds, validations) should be implemented in dedicated processors.
+ * Current Implementation: Basic structure with placeholder calculations
  */
 public class ConcentrationAggregator implements AggregateFunction<Account, ConcentrationAggregator.ConcentrationAccumulator, ConcentrationResult> {
     
     /**
-     * Accumulator class for maintaining aggregation state.
+     * SCAFFOLD: Accumulator for concentration metrics
+     * TODO: Define specific fields based on concentration calculation requirements from user stories
      */
     public static class ConcentrationAccumulator {
+        // TODO: Add fields based on business requirements
+        // Example placeholders:
         public String accountType;
-        public double totalBalance;
-        public int accountCount;
-        public double maxBalance;
-        public double minBalance;
+        public double aggregatedValue;
+        public int recordCount;
+        
+        // TODO: Add more fields as per concentration calculation business rules
+        // Examples: riskMetrics, thresholds, exposureLimits, etc.
         
         public ConcentrationAccumulator() {
-            this.totalBalance = 0.0;
-            this.accountCount = 0;
-            this.maxBalance = Double.MIN_VALUE;
-            this.minBalance = Double.MAX_VALUE;
+            // TODO: Initialize accumulator state based on business requirements
+            this.aggregatedValue = 0.0;
+            this.recordCount = 0;
         }
     }
     
@@ -48,110 +48,126 @@ public class ConcentrationAggregator implements AggregateFunction<Account, Conce
     
     @Override
     public ConcentrationAccumulator add(Account account, ConcentrationAccumulator accumulator) {
+        // TODO: Implement aggregation logic based on concentration calculation requirements
+        
         if (account == null) {
             return accumulator;
         }
         
-        // Set account type if not already set
+        // PLACEHOLDER: Basic aggregation - replace with actual business logic
         if (accumulator.accountType == null) {
             accumulator.accountType = account.getAccountType();
         }
         
-        // Update aggregation values
-        accumulator.totalBalance += account.getBalance();
-        accumulator.accountCount++;
-        accumulator.maxBalance = Math.max(accumulator.maxBalance, account.getBalance());
-        accumulator.minBalance = Math.min(accumulator.minBalance, account.getBalance());
+        // TODO: Implement actual concentration calculation logic here
+        // Examples of what might be needed:
+        // - Risk exposure calculations
+        // - Threshold validations
+        // - Concentration ratio computations
+        // - Compliance checks
+        
+        accumulator.aggregatedValue += account.getBalance(); // PLACEHOLDER
+        accumulator.recordCount++;
         
         return accumulator;
     }
     
     @Override
     public ConcentrationResult getResult(ConcentrationAccumulator accumulator) {
-        if (accumulator.accountCount == 0) {
-            return new ConcentrationResult(
-                "EMPTY",
-                accumulator.accountType,
-                0.0,
-                "AGGREGATION",
-                0.0,
-                0.0,
-                LocalDateTime.now(),
-                "NO_DATA"
-            );
+        // TODO: Implement result generation based on business requirements
+        
+        if (accumulator.recordCount == 0) {
+            // TODO: Define behavior for empty windows based on business rules
+            return createEmptyResult();
         }
         
-        // Pure aggregation result - no business logic applied
-        double averageBalance = accumulator.totalBalance / accumulator.accountCount;
-        
+        // PLACEHOLDER: Basic result generation - replace with actual business logic
         return new ConcentrationResult(
-            accumulator.accountType + "_CONCENTRATION",
+            "PLACEHOLDER_ID", // TODO: Generate proper entity ID based on business rules
             accumulator.accountType,
-            averageBalance,           // Raw average (business logic to be applied later)
-            "AGGREGATION",
-            accumulator.totalBalance,
-            1.0,                     // Default weight (risk calculation to be done by business processor)
+            accumulator.aggregatedValue, // TODO: Replace with actual concentration calculation
+            "PLACEHOLDER_METHOD", // TODO: Define calculation method based on requirements
+            accumulator.aggregatedValue, // TODO: Calculate total exposure per business rules
+            1.0, // TODO: Calculate risk weight based on risk management requirements
             LocalDateTime.now(),
-            "AGGREGATED"
+            "PLACEHOLDER_STATUS" // TODO: Define status based on validation results
         );
     }
     
     @Override
     public ConcentrationAccumulator merge(ConcentrationAccumulator acc1, ConcentrationAccumulator acc2) {
+        // TODO: Implement merge logic for parallel processing
+        
         ConcentrationAccumulator merged = new ConcentrationAccumulator();
         
+        // PLACEHOLDER: Basic merge - implement proper business logic
         merged.accountType = acc1.accountType != null ? acc1.accountType : acc2.accountType;
-        merged.totalBalance = acc1.totalBalance + acc2.totalBalance;
-        merged.accountCount = acc1.accountCount + acc2.accountCount;
-        merged.maxBalance = Math.max(acc1.maxBalance, acc2.maxBalance);
-        merged.minBalance = Math.min(acc1.minBalance, acc2.minBalance);
+        merged.aggregatedValue = acc1.aggregatedValue + acc2.aggregatedValue;
+        merged.recordCount = acc1.recordCount + acc2.recordCount;
+        
+        // TODO: Add proper merging for other business-specific fields
         
         return merged;
     }
     
     /**
-     * Calculate concentration ratio based on balance distribution.
-     * Higher values indicate higher concentration risk.
+     * SCAFFOLD: Helper method for empty result creation
+     * TODO: Implement based on business requirements for handling empty data
      */
-    private double calculateConcentrationRatio(ConcentrationAccumulator accumulator) {
-        if (accumulator.accountCount <= 1 || accumulator.totalBalance == 0) {
-            return 1.0; // Maximum concentration for single account or zero balance
-        }
-        
-        // Simple concentration ratio based on balance spread
-        double balanceRange = accumulator.maxBalance - accumulator.minBalance;
-        double averageBalance = accumulator.totalBalance / accumulator.accountCount;
-        
-        if (averageBalance == 0) {
-            return 1.0;
-        }
-        
-        // Higher ratio means more concentration (less spread)
-        return 1.0 - (balanceRange / (accumulator.maxBalance + 1.0));
+    private ConcentrationResult createEmptyResult() {
+        return new ConcentrationResult(
+            "EMPTY_WINDOW",
+            "UNKNOWN",
+            0.0,
+            "NO_DATA",
+            0.0,
+            0.0,
+            LocalDateTime.now(),
+            "NO_DATA"
+        );
     }
 }
 
 /**
- * Window function for finalizing concentration aggregations with window metadata.
+ * SCAFFOLD: Window Function Template for Concentration Processing
+ * 
+ * This function processes aggregated results within time windows.
+ * TODO: Implement window-specific business logic based on requirements
  */
 class ConcentrationWindowFunction implements WindowFunction<ConcentrationResult, ConcentrationResult, String, TimeWindow> {
     
     @Override
     public void apply(String key, TimeWindow window, Iterable<ConcentrationResult> input, Collector<ConcentrationResult> out) throws Exception {
+        // TODO: Implement window processing logic based on business requirements
+        
         for (ConcentrationResult result : input) {
-            // Add window metadata to the result
-            ConcentrationResult enrichedResult = new ConcentrationResult(
-                result.getEntityId() + "_WINDOW_" + window.getStart(),
-                result.getEntityType(),
-                result.getConcentrationValue(),
-                result.getCalculationMethod() + "_WINDOWED",
-                result.getTotalExposure(),
-                result.getRiskWeight(),
-                result.getCalculatedAt(),
-                result.getStatus()
-            );
+            // PLACEHOLDER: Basic window enrichment - replace with actual business logic
+            // TODO: Add window-specific processing:
+            // - Time-based validations
+            // - Window metadata enrichment
+            // - Cross-window calculations
+            // - Alert generation based on thresholds
             
-            out.collect(enrichedResult);
+            ConcentrationResult processedResult = enrichWithWindowMetadata(result, window, key);
+            out.collect(processedResult);
         }
+    }
+    
+    /**
+     * SCAFFOLD: Helper method for window metadata enrichment
+     * TODO: Implement based on downstream system requirements
+     */
+    private ConcentrationResult enrichWithWindowMetadata(ConcentrationResult result, TimeWindow window, String key) {
+        // PLACEHOLDER: Basic enrichment - implement actual business logic
+        return new ConcentrationResult(
+            result.getEntityId() + "_W" + window.getStart(), // TODO: Implement proper ID generation
+            result.getEntityType(),
+            result.getConcentrationValue(),
+            result.getCalculationMethod() + "_WINDOWED", // TODO: Update method based on window processing
+            result.getTotalExposure(),
+            result.getRiskWeight(),
+            result.getCalculatedAt(),
+            "PROCESSED" // TODO: Set status based on validation results
+        );
     }
 }

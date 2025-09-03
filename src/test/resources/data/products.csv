@@ -1,0 +1,11 @@
+productId,productName,category,price,quantity,description,createdAt,updatedAt
+PROD001,Savings Account,DEPOSIT,0.00,1,Standard savings account with competitive interest rates,2025-09-03T09:00:00,2025-09-03T09:00:00
+PROD002,Investment Portfolio,INVESTMENT,1000.00,1,Diversified investment portfolio for long-term growth,2025-09-03T09:01:00,2025-09-03T09:01:00
+PROD003,Term Deposit,DEPOSIT,5000.00,1,Fixed term deposit with guaranteed returns,2025-09-03T09:02:00,2025-09-03T09:02:00
+PROD004,Stock Trading,INVESTMENT,500.00,1,Individual stock trading platform access,2025-09-03T09:03:00,2025-09-03T09:03:00
+PROD005,Mutual Fund,INVESTMENT,250.00,1,Professionally managed mutual fund investments,2025-09-03T09:04:00,2025-09-03T09:04:00
+PROD006,Current Account,DEPOSIT,0.00,1,Business current account with unlimited transactions,2025-09-03T09:05:00,2025-09-03T09:05:00
+PROD007,Credit Line,CREDIT,2000.00,1,Flexible credit line for business operations,2025-09-03T09:06:00,2025-09-03T09:06:00
+PROD008,Forex Trading,INVESTMENT,1500.00,1,Foreign exchange trading platform,2025-09-03T09:07:00,2025-09-03T09:07:00
+PROD009,Money Market,DEPOSIT,10000.00,1,High-yield money market account,2025-09-03T09:08:00,2025-09-03T09:08:00
+PROD010,Bond Portfolio,INVESTMENT,5000.00,1,Government and corporate bond portfolio,2025-09-03T09:09:00,2025-09-03T09:09:00

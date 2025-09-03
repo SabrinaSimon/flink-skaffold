@@ -10,6 +10,7 @@ import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -17,8 +18,9 @@ import java.time.LocalDateTime;
  * Implements business logic for cash position management and analysis.
  * Follows Flink best practices for stateful stream processing.
  */
-public class CashProcessingPipeline {
+public class CashProcessingPipeline implements Serializable {
     
+    private static final long serialVersionUID = 1L;
     private final String pipelineName;
     private final long windowSizeMillis;
     

@@ -5,12 +5,15 @@ import com.example.flink.connectors.serialization.ProductDeserializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
+import java.io.Serializable;
+
 /**
  * File source connector for Product data streams.
  * Handles reading Product data from file sources with proper error handling and serialization.
  */
-public class ProductFileSourceConnector {
+public class ProductFileSourceConnector implements Serializable {
     
+    private static final long serialVersionUID = 1L;
     private final String filePath;
     
     public ProductFileSourceConnector(String filePath) {

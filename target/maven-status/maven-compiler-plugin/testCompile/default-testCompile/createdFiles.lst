@@ -1,4 +1,5 @@
 com\example\flink\job\DataProcessingJobTest.class
+com\example\flink\integration\FlinkDataProcessingIntegrationTest.class
 com\example\flink\utils\ConstantsTest.class
 com\example\flink\config\FlinkConfigurationPropertiesTest.class
 com\example\flink\testutils\SampleDataGenerator.class

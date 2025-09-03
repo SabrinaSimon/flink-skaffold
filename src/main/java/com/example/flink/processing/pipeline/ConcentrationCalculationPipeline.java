@@ -10,6 +10,7 @@ import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -17,8 +18,9 @@ import java.time.LocalDateTime;
  * Implements business logic for risk concentration calculations.
  * Follows Flink best practices for windowed processing and keyed streams.
  */
-public class ConcentrationCalculationPipeline {
+public class ConcentrationCalculationPipeline implements Serializable {
     
+    private static final long serialVersionUID = 1L;
     private final String pipelineName;
     private final long windowSizeMillis;
     

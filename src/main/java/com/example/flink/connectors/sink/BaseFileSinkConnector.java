@@ -7,6 +7,7 @@ import org.apache.flink.streaming.api.functions.sink.filesystem.rollingpolicies.
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.time.Duration;
 
 /**
@@ -14,7 +15,9 @@ import java.time.Duration;
  * Provides common functionality for writing data to files in Flink applications.
  * Follows Flink 1.18.1 best practices for file sinks with rolling policies.
  */
-public abstract class BaseFileSinkConnector<T> {
+public abstract class BaseFileSinkConnector<T> implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
     
     protected final String outputPath;
     protected final String sinkName;

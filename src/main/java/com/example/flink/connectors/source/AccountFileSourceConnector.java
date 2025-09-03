@@ -5,12 +5,15 @@ import com.example.flink.connectors.serialization.AccountDeserializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
+import java.io.Serializable;
+
 /**
  * File source connector for Account data streams.
  * Handles reading Account data from file sources with proper error handling and serialization.
  */
-public class AccountFileSourceConnector {
+public class AccountFileSourceConnector implements Serializable {
     
+    private static final long serialVersionUID = 1L;
     private final String filePath;
     
     public AccountFileSourceConnector(String filePath) {

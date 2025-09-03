@@ -12,35 +12,34 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * Technical aggregator for accumulating cash-related data within time windows.
- * Pure aggregation without business logic - business rules should be applied in separate processors.
+ * SCAFFOLD: Cash Processing Aggregator Template
  * 
- * This aggregator only:
- * - Accumulates account balances
- * - Counts transactions
- * - Tracks timing information
+ * This is a scaffolding template for cash position calculations.
+ * Replace TODO placeholders with actual business logic when implementing user stories.
  * 
- * Business logic (validation, calculations, rules) should be implemented in dedicated processors.
+ * Current Implementation: Basic structure with placeholder calculations
  */
 public class CashAggregator implements AggregateFunction<Account, CashAggregator.CashAccumulator, CashResult> {
     
     /**
-     * Accumulator class for maintaining cash aggregation state.
+     * SCAFFOLD: Accumulator for cash metrics
+     * TODO: Define specific fields based on cash calculation requirements
      */
     public static class CashAccumulator {
+        // TODO: Add fields based on business requirements
         public String accountId;
         public String currency;
-        public double totalBalance;
-        public double maxBalance;
-        public double minBalance;
-        public int transactionCount;
+        public double aggregatedValue;
+        public int recordCount;
         public LocalDateTime lastUpdateTime;
         
+        // TODO: Add more fields as per cash calculation business rules
+        // Examples: availableLimits, reservedAmounts, pendingTransactions, etc.
+        
         public CashAccumulator() {
-            this.totalBalance = 0.0;
-            this.maxBalance = Double.MIN_VALUE;
-            this.minBalance = Double.MAX_VALUE;
-            this.transactionCount = 0;
+            // TODO: Initialize accumulator state based on business requirements
+            this.aggregatedValue = 0.0;
+            this.recordCount = 0;
             this.lastUpdateTime = LocalDateTime.now();
         }
     }
@@ -52,21 +51,28 @@ public class CashAggregator implements AggregateFunction<Account, CashAggregator
     
     @Override
     public CashAccumulator add(Account account, CashAccumulator accumulator) {
+        // TODO: Implement cash aggregation logic based on requirements
+        
         if (account == null) {
             return accumulator;
         }
         
-        // Set account details if not already set
+        // PLACEHOLDER: Basic aggregation - replace with actual business logic
         if (accumulator.accountId == null) {
             accumulator.accountId = account.getAccountId();
             accumulator.currency = account.getCurrency();
         }
         
-        // Update cash metrics
-        accumulator.totalBalance = account.getBalance(); // Use latest balance as current position
-        accumulator.maxBalance = Math.max(accumulator.maxBalance, account.getBalance());
-        accumulator.minBalance = Math.min(accumulator.minBalance, account.getBalance());
-        accumulator.transactionCount++;
+        // TODO: Implement actual cash calculation logic here
+        // Examples of what might be needed:
+        // - Available cash calculations
+        // - Pending transaction handling
+        // - Credit limit processing
+        // - Currency conversion
+        // - Compliance validations
+        
+        accumulator.aggregatedValue = account.getBalance(); // PLACEHOLDER
+        accumulator.recordCount++;
         accumulator.lastUpdateTime = account.getUpdatedAt() != null ? 
                                    account.getUpdatedAt() : LocalDateTime.now();
         
@@ -75,88 +81,120 @@ public class CashAggregator implements AggregateFunction<Account, CashAggregator
     
     @Override
     public CashResult getResult(CashAccumulator accumulator) {
-        if (accumulator.transactionCount == 0 || accumulator.accountId == null) {
-            return new CashResult(
-                "UNKNOWN",
-                UUID.randomUUID().toString(),
-                0.0,
-                0.0,
-                0.0,
-                Constants.DEFAULT_CURRENCY,
-                LocalDateTime.now(),
-                "NO_DATA"
-            );
+        // TODO: Implement result generation based on business requirements
+        
+        if (accumulator.recordCount == 0 || accumulator.accountId == null) {
+            // TODO: Define behavior for empty windows based on business rules
+            return createEmptyResult();
         }
         
-        // Pure aggregation result - no business logic applied
+        // PLACEHOLDER: Basic result generation - replace with actual business logic
         return new CashResult(
             accumulator.accountId,
-            generateTransactionId(accumulator),
-            accumulator.totalBalance,  // Raw total balance
-            accumulator.totalBalance,  // Raw available (business logic to be applied later)
-            0.0,                      // Pending amount (to be calculated by business processor)
+            generatePlaceholderTransactionId(accumulator), // TODO: Implement proper ID generation
+            accumulator.aggregatedValue, // TODO: Calculate actual cash position
+            accumulator.aggregatedValue, // TODO: Calculate available cash per business rules
+            0.0, // TODO: Calculate pending amounts based on requirements
             accumulator.currency != null ? accumulator.currency : Constants.DEFAULT_CURRENCY,
             accumulator.lastUpdateTime,
-            "AGGREGATED"
+            "PLACEHOLDER_STATUS" // TODO: Define status based on validation results
         );
     }
     
     @Override
     public CashAccumulator merge(CashAccumulator acc1, CashAccumulator acc2) {
+        // TODO: Implement merge logic for parallel processing
+        
         CashAccumulator merged = new CashAccumulator();
         
-        // Use the most recent account information
+        // PLACEHOLDER: Basic merge - implement proper business logic
         if (acc2.lastUpdateTime.isAfter(acc1.lastUpdateTime)) {
             merged.accountId = acc2.accountId;
             merged.currency = acc2.currency;
-            merged.totalBalance = acc2.totalBalance;
+            merged.aggregatedValue = acc2.aggregatedValue;
             merged.lastUpdateTime = acc2.lastUpdateTime;
         } else {
             merged.accountId = acc1.accountId;
             merged.currency = acc1.currency;
-            merged.totalBalance = acc1.totalBalance;
+            merged.aggregatedValue = acc1.aggregatedValue;
             merged.lastUpdateTime = acc1.lastUpdateTime;
         }
         
-        merged.maxBalance = Math.max(acc1.maxBalance, acc2.maxBalance);
-        merged.minBalance = Math.min(acc1.minBalance, acc2.minBalance);
-        merged.transactionCount = acc1.transactionCount + acc2.transactionCount;
+        merged.recordCount = acc1.recordCount + acc2.recordCount;
+        
+        // TODO: Add proper merging for other business-specific fields
         
         return merged;
     }
     
     /**
-     * Generate a unique transaction ID for the cash aggregation.
+     * SCAFFOLD: Helper method for empty result creation
+     * TODO: Implement based on business requirements for handling empty data
      */
-    private String generateTransactionId(CashAccumulator accumulator) {
-        return "CASH_AGG_" + accumulator.accountId + "_" + 
-               accumulator.lastUpdateTime.toString().replace(":", "").replace("-", "");
+    private CashResult createEmptyResult() {
+        return new CashResult(
+            "UNKNOWN",
+            UUID.randomUUID().toString(),
+            0.0,
+            0.0,
+            0.0,
+            Constants.DEFAULT_CURRENCY,
+            LocalDateTime.now(),
+            "NO_DATA"
+        );
+    }
+    
+    /**
+     * SCAFFOLD: Placeholder transaction ID generator
+     * TODO: Implement proper transaction ID generation based on business rules
+     */
+    private String generatePlaceholderTransactionId(CashAccumulator accumulator) {
+        return "PLACEHOLDER_" + accumulator.accountId + "_" + System.currentTimeMillis();
     }
 }
 
 /**
- * Window function for finalizing cash calculations with window metadata.
+ * SCAFFOLD: Window Function Template for Cash Processing
+ * 
+ * This function processes aggregated results within time windows.
+ * TODO: Implement window-specific business logic based on requirements
  */
 class CashWindowFunction implements WindowFunction<CashResult, CashResult, String, TimeWindow> {
     
     @Override
     public void apply(String key, TimeWindow window, Iterable<CashResult> input, Collector<CashResult> out) throws Exception {
+        // TODO: Implement window processing logic based on business requirements
+        
         for (CashResult result : input) {
-            // Add window timing information to transaction ID
-            String windowedTransactionId = result.getTransactionId() + "_W" + window.getStart();
+            // PLACEHOLDER: Basic window enrichment - replace with actual business logic
+            // TODO: Add window-specific processing:
+            // - Time-based validations
+            // - Window metadata enrichment
+            // - Cross-window calculations
+            // - Alert generation based on thresholds
             
-            CashResult enrichedResult = new CashResult(
-                result.getAccountId(),
-                windowedTransactionId,
-                result.getCashPosition(),
-                result.getAvailableCash(),
-                result.getPendingAmount(),
-                result.getCurrency(),
-                result.getCalculatedAt(),
-                result.getStatus()
-            );
-            
-            out.collect(enrichedResult);
+            CashResult processedResult = enrichWithWindowMetadata(result, window, key);
+            out.collect(processedResult);
         }
+    }
+    
+    /**
+     * SCAFFOLD: Helper method for window metadata enrichment
+     * TODO: Implement based on downstream system requirements
+     */
+    private CashResult enrichWithWindowMetadata(CashResult result, TimeWindow window, String key) {
+        // PLACEHOLDER: Basic enrichment - implement actual business logic
+        String windowedTransactionId = result.getTransactionId() + "_W" + window.getStart();
+        
+        return new CashResult(
+            result.getAccountId(),
+            windowedTransactionId, // TODO: Implement proper windowed ID generation
+            result.getCashPosition(),
+            result.getAvailableCash(),
+            result.getPendingAmount(),
+            result.getCurrency(),
+            result.getCalculatedAt(),
+            "PROCESSED" // TODO: Set status based on validation results
+        );
     }
 }

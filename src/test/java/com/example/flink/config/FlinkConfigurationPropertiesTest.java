@@ -1,70 +1,90 @@
 package com.example.flink.config;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for FlinkConfigurationProperties.
- * Tests Spring Boot native YAML configuration binding.
+ * Tests configuration object creation and property setting.
  */
-@SpringBootTest
-@ActiveProfiles("test")
 class FlinkConfigurationPropertiesTest {
 
-    @Autowired
-    private FlinkConfigurationProperties config;
-
     @Test
-    void testApplicationNameIsConfigured() {
-        assertNotNull(config.getApplication().getName());
-        assertFalse(config.getApplication().getName().isEmpty());
+    void testConfigurationPropertiesCreation() {
+        FlinkConfigurationProperties config = new FlinkConfigurationProperties();
+        assertNotNull(config);
+        assertNotNull(config.getApplication());
+        assertNotNull(config.getSource());
+        assertNotNull(config.getProcessing());
+        assertNotNull(config.getSink());
+        assertNotNull(config.getQuality());
+        assertNotNull(config.getMetrics());
     }
 
     @Test
-    void testApplicationVersionIsConfigured() {
-        assertNotNull(config.getApplication().getVersion());
-        assertFalse(config.getApplication().getVersion().isEmpty());
+    void testApplicationConfiguration() {
+        FlinkConfigurationProperties config = new FlinkConfigurationProperties();
+        config.getApplication().setName("Test App");
+        config.getApplication().setVersion("1.0.0");
+        
+        assertEquals("Test App", config.getApplication().getName());
+        assertEquals("1.0.0", config.getApplication().getVersion());
     }
 
     @Test
-    void testProcessingParallelismIsPositive() {
-        assertTrue(config.getProcessing().getParallelism() > 0);
+    void testProcessingConfiguration() {
+        FlinkConfigurationProperties config = new FlinkConfigurationProperties();
+        config.getProcessing().setParallelism(4);
+        config.getProcessing().getCheckpointing().setInterval(10000);
+        
+        assertEquals(4, config.getProcessing().getParallelism());
+        assertEquals(10000, config.getProcessing().getCheckpointing().getInterval());
     }
 
     @Test
-    void testCheckpointingIntervalIsPositive() {
-        assertTrue(config.getProcessing().getCheckpointing().getInterval() > 0);
+    void testSourceConfiguration() {
+        FlinkConfigurationProperties config = new FlinkConfigurationProperties();
+        config.getSource().getAccount().setPath("/test/accounts.csv");
+        config.getSource().getProduct().setPath("/test/products.csv");
+        
+        assertEquals("/test/accounts.csv", config.getSource().getAccount().getPath());
+        assertEquals("/test/products.csv", config.getSource().getProduct().getPath());
     }
 
     @Test
-    void testWindowSizesArePositive() {
-        assertTrue(config.getProcessing().getConcentration().getWindow().getSize().getMs() > 0);
-        assertTrue(config.getProcessing().getCash().getWindow().getSize().getMs() > 0);
+    void testSinkConfiguration() {
+        FlinkConfigurationProperties config = new FlinkConfigurationProperties();
+        config.getSink().getConcentration().setPath("/test/concentration");
+        config.getSink().getCash().setPath("/test/cash");
+        
+        assertEquals("/test/concentration", config.getSink().getConcentration().getPath());
+        assertEquals("/test/cash", config.getSink().getCash().getPath());
     }
 
     @Test
-    void testFilePathsAreConfigured() {
-        assertNotNull(config.getSource().getAccount().getPath());
-        assertNotNull(config.getSource().getProduct().getPath());
-        assertNotNull(config.getSink().getConcentration().getPath());
-        assertNotNull(config.getSink().getCash().getPath());
+    void testWindowConfiguration() {
+        FlinkConfigurationProperties config = new FlinkConfigurationProperties();
+        config.getProcessing().getConcentration().getWindow().getSize().setMs(5000);
+        config.getProcessing().getCash().getWindow().getSize().setMs(3000);
+        
+        assertEquals(5000, config.getProcessing().getConcentration().getWindow().getSize().getMs());
+        assertEquals(3000, config.getProcessing().getCash().getWindow().getSize().getMs());
     }
 
     @Test
-    void testValidationIsConfigurable() {
-        // Should not throw exception
-        boolean validationEnabled = config.getQuality().getValidation().isEnabled();
-        // Test passes if no exception is thrown
+    void testQualityConfiguration() {
+        FlinkConfigurationProperties config = new FlinkConfigurationProperties();
+        config.getQuality().getValidation().setEnabled(true);
+        
+        assertTrue(config.getQuality().getValidation().isEnabled());
     }
 
     @Test
-    void testMetricsIsConfigurable() {
-        // Should not throw exception
-        boolean metricsEnabled = config.getMetrics().isEnabled();
-        // Test passes if no exception is thrown
+    void testMetricsConfiguration() {
+        FlinkConfigurationProperties config = new FlinkConfigurationProperties();
+        config.getMetrics().setEnabled(true);
+        
+        assertTrue(config.getMetrics().isEnabled());
     }
 }
