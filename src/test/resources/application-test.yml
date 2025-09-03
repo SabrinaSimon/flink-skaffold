@@ -1,0 +1,52 @@
+# Test Configuration for Flink Data Processing Application
+flink:
+  application:
+    name: "Flink Data Processing Test"
+    version: "1.0.0-TEST"
+    
+  processing:
+    parallelism: 1
+    checkpointing:
+      interval: 10000
+    concentration:
+      window:
+        size:
+          ms: 5000
+    cash:
+      window:
+        size:
+          ms: 5000
+
+  source:
+    account:
+      path: "src/test/resources/data/test-accounts.csv"
+    product:
+      path: "src/test/resources/data/test-products.csv"
+
+  sink:
+    concentration:
+      path: "target/test-output/concentration-results"
+    cash:
+      path: "target/test-output/cash-results"
+    parallelism: 1
+    file:
+      rolling:
+        interval:
+          ms: 5000
+
+  quality:
+    validation:
+      enabled: true
+    minimum:
+      score: 0.7
+
+  metrics:
+    enabled: false
+
+# Logging configuration for tests
+logging:
+  level:
+    root: WARN
+    com.example.flink: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"

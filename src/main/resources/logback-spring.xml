@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Console appender for development -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- File appender for production -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/flink-data-processing.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/flink-data-processing.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Flink specific logging -->
+    <logger name="org.apache.flink" level="INFO" />
+    <logger name="org.apache.flink.runtime.checkpoint" level="WARN" />
+    <logger name="org.apache.flink.runtime.jobmanager" level="INFO" />
+    <logger name="org.apache.flink.runtime.taskmanager" level="INFO" />
+    
+    <!-- Application specific logging -->
+    <logger name="com.example.flink" level="INFO" />
+    <logger name="com.example.flink.job.DataProcessingJob" level="INFO" />
+    <logger name="com.example.flink.pipeline" level="DEBUG" />
+
+    <!-- Spring Boot logging -->
+    <logger name="org.springframework" level="INFO" />
+    <logger name="org.springframework.boot" level="INFO" />
+
+    <!-- Root logger -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+
+    <!-- Production profile -->
+    <springProfile name="production">
+        <root level="WARN">
+            <appender-ref ref="FILE" />
+        </root>
+        <logger name="com.example.flink" level="INFO" />
+    </springProfile>
+
+    <!-- Development profile -->
+    <springProfile name="development">
+        <root level="DEBUG">
+            <appender-ref ref="CONSOLE" />
+        </root>
+        <logger name="com.example.flink" level="DEBUG" />
+    </springProfile>
+</configuration>

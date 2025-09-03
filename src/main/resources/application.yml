@@ -1,0 +1,87 @@
+# Flink Data Processing Application Configuration
+# Environment: Development
+
+flink:
+  application:
+    name: "flink-data-processing"
+    version: "1.0.0"
+
+  # Data Source Configuration
+  sources:
+    accounts:
+      path: "./data/input/accounts.csv"
+      format: "CSV"
+      parallelism: 2
+      monitoring:
+        enabled: true
+        interval: 30000
+    
+    products:
+      path: "./data/input/products.csv"
+      format: "CSV"
+      parallelism: 2
+      monitoring:
+        enabled: true
+        interval: 30000
+
+  # Processing Configuration
+  processing:
+    concentration:
+      window:
+        size: 60000  # milliseconds
+        slide: 10000
+      parallelism: 4
+      
+    cash:
+      window:
+        size: 30000  # milliseconds
+        slide: 5000
+      parallelism: 4
+      
+    checkpointing:
+      interval: 60000
+      mode: "EXACTLY_ONCE"
+      timeout: 300000
+
+  # Sink Configuration
+  sinks:
+    concentration:
+      path: "./data/output/concentration"
+      format: "CSV"
+      parallelism: 1
+      rolling:
+        interval: 300000  # 5 minutes
+        
+    cash:
+      path: "./data/output/cash"
+      format: "CSV"
+      parallelism: 1
+      rolling:
+        interval: 300000
+
+  # Quality and Validation
+  quality:
+    validation:
+      enabled: true
+      strict: false
+    minimum:
+      score: 0.7
+      
+  # Logging and Monitoring
+  logging:
+    level: "INFO"
+    pattern: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    
+  monitoring:
+    metrics:
+      enabled: true
+      interval: 10000
+    alerts:
+      enabled: false
+
+# Spring Boot Configuration
+spring:
+  application:
+    name: flink-data-processing
+  profiles:
+    active: dev
