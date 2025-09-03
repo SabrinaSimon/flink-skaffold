@@ -356,6 +356,239 @@ flink-skaffold/
 
 ---
 
+# Agile Process for Technical Stories
+
+## The Challenge: Functional Stories vs Technical Foundation
+
+When you have **functional user stories** like:
+- "As a risk manager, I want to calculate portfolio concentration..."
+- "As a trader, I want to see cash positions..."
+
+But these stories **cannot be implemented** without foundational technical work like our scaffold (TS-001).
+
+## Process for Raising Technical Stories in Agile
+
+### 1. **Identify the Gap During Sprint Planning**
+
+```mermaid
+graph LR
+    A[Functional Story Review] --> B{Can we implement this?}
+    B -->|No| C[Identify Technical Dependencies]
+    B -->|Yes| D[Proceed with Story]
+    C --> E[Create Technical Story]
+    E --> F[Prioritize with PO]
+    F --> G[Add to Backlog]
+```
+
+### 2. **The SPIDR Approach for Technical Stories**
+
+When functional stories are **blocked by technical dependencies**:
+
+| **S**tory | **P**roblem | **I**mpact | **D**ependency | **R**isk |
+|-----------|-------------|------------|----------------|----------|
+| US-001: Calculate Risk Concentration | No processing platform exists | Cannot deliver any risk features | Need Flink scaffold | High - Blocks all stories |
+| US-002: Cash Position Dashboard | No data pipeline | No real-time data available | Need data processing | Medium - Can use batch initially |
+
+### 3. **Conversation Framework with Product Owner**
+
+#### **The "3-Why" Conversation:**
+
+```
+YOU: "We can't implement the concentration calculation story."
+
+PO: "Why not?"
+
+YOU: "Because we don't have a data processing platform."
+
+PO: "Why don't we have one?"
+
+YOU: "Because we're building a greenfield system and need foundational architecture."
+
+PO: "Why is this technical work valuable?"
+
+YOU: "Because without it, we can't deliver ANY of the 15 user stories in our roadmap."
+```
+
+#### **The Business Value Translation:**
+
+```yaml
+Technical Story: "Set up Flink processing scaffold"
+Business Translation: "Enable all real-time data processing features"
+
+Technical Value:
+  - Unblocks: 15 functional stories worth 120 story points
+  - Prevents: 3 weeks of rework if we build features without proper foundation
+  - Enables: Scalable platform supporting 1000+ concurrent users
+  - Reduces: Future technical debt by 60%
+```
+
+### 4. **Formal Process in Agile Events**
+
+#### **During Backlog Refinement:**
+1. **Surface Dependencies**: "Story X depends on technical foundation Y"
+2. **Quantify Impact**: "Without Y, we can't deliver X, Z, A, B stories"
+3. **Propose Solution**: "Technical Story TS-001 enables multiple functional stories"
+4. **Request Prioritization**: "Should we prioritize foundation before features?"
+
+#### **During Sprint Planning:**
+```
+SCENARIO: Team pulls functional story but identifies technical dependency
+
+PROCESS:
+1. Scrum Master: "What's blocking this story?"
+2. Developer: "We need the Flink scaffold from TS-001"
+3. Product Owner: "How long will TS-001 take?"
+4. Team: "2 sprints, but it enables 8 other stories"
+5. Decision: Swap functional story for TS-001 in current sprint
+```
+
+### 5. **Documentation & Justification Framework**
+
+#### **Technical Story Justification Template:**
+
+```markdown
+## Technical Story Impact Analysis
+
+### Functional Stories Blocked:
+- [ ] US-001: Risk Concentration (13 SP) - HIGH PRIORITY
+- [ ] US-003: Cash Dashboard (8 SP) - HIGH PRIORITY  
+- [ ] US-007: Portfolio Analytics (21 SP) - MEDIUM PRIORITY
+- [ ] US-012: Compliance Reporting (5 SP) - LOW PRIORITY
+
+**Total Blocked Value**: 47 Story Points
+
+### Technical Story Solution:
+**TS-001**: Flink Application Scaffold (13 SP)
+
+### Return on Investment:
+- **Effort**: 13 SP (1.5 sprints)
+- **Unlocks**: 47 SP (4-5 sprints of features)
+- **ROI**: 3.6x immediate, 10x+ over project lifetime
+
+### Risk of Delay:
+- Sprint 2: 13 SP blocked
+- Sprint 3: 34 SP blocked  
+- Sprint 4: 47 SP blocked + technical debt accumulation
+```
+
+### 6. **Stakeholder Communication Strategy**
+
+#### **For Product Owner:**
+```
+"We have 2 options:
+1. Build features on shaky foundation → 3x rework later
+2. Build solid foundation now → 3x faster feature delivery"
+```
+
+#### **For Business Stakeholders:**
+```
+"Think of this like building a house:
+- Option 1: Start with rooms before foundation → House collapses
+- Option 2: Build foundation first → Solid house that lasts"
+```
+
+### 7. **Agile Ceremonies Integration**
+
+#### **Daily Standups:**
+```
+"Yesterday: Analyzed US-001 implementation
+Today: Discovered we need TS-001 scaffold first  
+Blockers: Need PO decision on prioritizing foundation work"
+```
+
+#### **Retrospectives:**
+```
+What went well: Identified technical dependencies early
+What didn't: We should have scaffolding stories in initial backlog
+Action item: Create technical debt assessment for each epic
+```
+
+### 8. **Creating Technical User Stories**
+
+#### **Template for Technical Stories:**
+
+```markdown
+## Technical User Story Template
+
+**Title**: TS-XXX: [Technical Component/Infrastructure]
+
+**As a** [Role - Developer/System/Platform]
+**I need** [Technical capability/infrastructure]  
+**So that** [Business outcome/functional stories can be delivered]
+
+### Background Context:
+- Current state: [What exists today]
+- Problem: [What's missing or broken]
+- Solution approach: [Technical solution overview]
+
+### Functional Stories Enabled:
+- [ ] US-XXX: [Story] (X SP)
+- [ ] US-XXX: [Story] (X SP)
+**Total unlocked value**: X SP
+
+### Acceptance Criteria:
+- [ ] [Technical requirement 1]
+- [ ] [Technical requirement 2]
+- [ ] [Integration test passes]
+- [ ] [Documentation complete]
+
+### Definition of Done:
+- [ ] Code complete and reviewed
+- [ ] Tests passing (unit + integration)
+- [ ] Documentation updated
+- [ ] Deployed to test environment
+- [ ] Demo-able to stakeholders
+
+### Technical Architecture:
+[Include diagrams, patterns, technologies]
+
+### Story Points: X
+### Priority: [HIGH/MEDIUM/LOW] based on functional story dependencies
+```
+
+## Practical Action Plan
+
+### **Immediate Steps (Today):**
+1. **Audit current backlog** - Identify which functional stories need technical foundation
+2. **Create dependency matrix** - Map functional stories to technical requirements
+3. **Draft technical stories** using the template above
+4. **Prepare business case** with ROI calculations
+
+### **Next Sprint Planning:**
+1. **Present dependency analysis** to Product Owner
+2. **Propose technical story prioritization** 
+3. **Get agreement** on foundation-first approach
+4. **Re-sequence backlog** with technical stories first
+
+### **Ongoing Process:**
+1. **Include technical stories** in every epic planning
+2. **Assess technical debt** in retrospectives  
+3. **Maintain technical backlog** alongside functional backlog
+4. **Regular architecture review** to identify future technical needs
+
+## Success Metrics
+
+- **Reduced Blocked Stories**: 0 functional stories blocked by missing technical foundation
+- **Faster Feature Delivery**: 50% reduction in story implementation time after foundation
+- **Lower Defect Rate**: 75% fewer production issues due to solid architecture
+- **Team Velocity**: Consistent or increasing velocity after initial technical investment
+
+## Key Principles
+
+### **Technical Stories are NOT Technical Debt**
+Technical stories are **foundational investments** that enable business value delivery, not cleanup work.
+
+### **Business Value First**
+Always frame technical work in terms of business outcomes and functional story enablement.
+
+### **Proactive Planning**
+Identify technical dependencies during epic planning, not during sprint execution.
+
+### **ROI-Driven Prioritization**
+Prioritize technical stories based on the functional value they unlock, not just technical elegance.
+
+---
+
 **Story Completed By:** Development Team  
 **Reviewed By:** Tech Lead, Architect  
 **Date Completed:** September 3, 2025  
